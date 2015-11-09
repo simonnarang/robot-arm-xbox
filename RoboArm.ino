@@ -5,12 +5,16 @@
 #endif
 USB Usb;
 XBOXONE Xbox(&Usb);
+int testLEDOne = 52;
+int testLEDTwo = 53;
 int motorOne = 3;
 int motorTwo = 5;
 int motorThree = 6;
 int motorFour = 9;
-int count;
+int motorZero = 175; //pwm val at which vex motors dont move
 void setup() {
+  pinMode(testLEDOne, OUTPUT);
+  pinMode(testLEDTwo, OUTPUT);
   pinMode(motorOne, OUTPUT);
   pinMode(motorTwo, OUTPUT);
   pinMode(motorThree, OUTPUT);
@@ -53,28 +57,48 @@ void loop() {
 
     if (Xbox.getButtonPress(L2) > 0 || Xbox.getButtonPress(R2) > 0) {
       if (Xbox.getButtonPress(L2) > 0) {
+        //rotate entire arm to left at speed based on l2 val
         analogWrite(motorOne, Xbox.getButtonPress(L2));
         Serial.print(F("L2: "));
         Serial.print(Xbox.getButtonPress(L2));
         Serial.print("\t");
-      }
+      }else{
+          //stop motor going to left rotation cuz l2 isnt down at all
+          analogWrite(motorOne, motorZero);
+        }
       if (Xbox.getButtonPress(R2) > 0) {
+        //rotate entire arm to right at speed based on r2 val
         Serial.print(F("R2: "));
         Serial.print(Xbox.getButtonPress(R2));
         Serial.print("\t");
-      }
+      }else{
+        //stop motor going to right rotation cuz r2 isnt down at all
+        analogWrite(motorOne, motorZero);
+        }
       Serial.println();
     }
 
-    if (Xbox.getButtonClick(UP))
+    if (Xbox.getButtonClick(UP)){
+      //test to make sure its all good
+      digitalWrite(testLEDOne, HIGH);
+      digitalWrite(testLEDTwo, HIGH);
       Serial.println(F("Up"));
-    if (Xbox.getButtonClick(DOWN))
+    }else{
+      digitalWrite(testLEDOne, LOW);
+      digitalWrite(testLEDTwo, LOW);
+      }
+    if (Xbox.getButtonClick(DOWN)){
+      //test to make sure its all good
       Serial.println(F("Down"));
-    if (Xbox.getButtonClick(LEFT))
+    }
+    if (Xbox.getButtonClick(LEFT)){
+      //test to make sure its all good
       Serial.println(F("Left"));
-    if (Xbox.getButtonClick(RIGHT))
+    }
+    if (Xbox.getButtonClick(RIGHT)){
+      //test to make sure its all good
       Serial.println(F("Right"));
-
+    }
     if (Xbox.getButtonClick(START))
       Serial.println(F("Start"));
     if (Xbox.getButtonClick(BACK))
