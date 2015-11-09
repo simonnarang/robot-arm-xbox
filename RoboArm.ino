@@ -11,6 +11,10 @@ int motorThree = 6;
 int motorFour = 9;
 int count;
 void setup() {
+  pinMode(motorOne, OUTPUT);
+  pinMode(motorTwo, OUTPUT);
+  pinMode(motorThree, OUTPUT);
+  pinMode(motorFour, OUTPUT);
   Serial.begin(115200);
   while (!Serial); // Wait for serial port to connect - used on Leonardo, Teensy and other boards with built-in USB CDC serial connection
   if (Usb.Init() == -1) {
