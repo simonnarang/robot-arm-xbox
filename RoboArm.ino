@@ -53,6 +53,7 @@ void loop() {
 
     if (Xbox.getButtonPress(L2) > 0 || Xbox.getButtonPress(R2) > 0) {
       if (Xbox.getButtonPress(L2) > 0) {
+        analogWrite(motorOne, Xbox.getButtonPress(L2));
         Serial.print(F("L2: "));
         Serial.print(Xbox.getButtonPress(L2));
         Serial.print("\t");
