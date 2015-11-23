@@ -11,7 +11,11 @@ int motorOne = 3;
 int motorTwo = 5;
 int motorThree = 6;
 int motorFour = 9;
-int motorZero = 175; //pwm val at which vex motors dont move
+int motorZero = 190; //pwm val at which vex motors dont move
+int motorTwoXYAverageStepOne;
+int motorTwoXYAverageStepTwo;
+int motorThreeXYAverageStepOne;
+int motorThreeXYAverageStepTwo;
 void setup() {
   pinMode(testLEDOne, OUTPUT);
   pinMode(testLEDTwo, OUTPUT);
@@ -39,11 +43,13 @@ void loop() {
         Serial.print("\t");
       }
       if (Xbox.getAnalogHat(LeftHatY) > 7500 || Xbox.getAnalogHat(LeftHatY) < -7500) {
+        analogWrite();
         Serial.print(F("LeftHatY: "));
         Serial.print(Xbox.getAnalogHat(LeftHatY));
         Serial.print("\t");
       }
       if (Xbox.getAnalogHat(RightHatX) > 7500 || Xbox.getAnalogHat(RightHatX) < -7500) {
+        analogWrite();
         Serial.print(F("RightHatX: "));
         Serial.print(Xbox.getAnalogHat(RightHatX));
         Serial.print("\t");
@@ -56,9 +62,9 @@ void loop() {
     }
 
     if (Xbox.getButtonPress(L2) > 0 || Xbox.getButtonPress(R2) > 0) {
-      if (Xbox.getButtonPress(L2) > 0) {
+      if (Xbox.getButtonPress(L2) > 190) {
         //rotate entire arm to left at speed based on l2 val
-        analogWrite(motorOne, Xbox.getButtonPress(L2));
+        analogWrite(motorOne, 190 + Xbox.getButtonPress(L2)/17);
         Serial.print(F("L2: "));
         Serial.print(Xbox.getButtonPress(L2));
         Serial.print("\t");
@@ -68,6 +74,7 @@ void loop() {
         }
       if (Xbox.getButtonPress(R2) > 0) {
         //rotate entire arm to right at speed based on r2 val
+        analogWrite(motorOne, 190 - Xbox.getButtonPress(R2)/11.5);
         Serial.print(F("R2: "));
         Serial.print(Xbox.getButtonPress(R2));
         Serial.print("\t");
@@ -76,6 +83,8 @@ void loop() {
         analogWrite(motorOne, motorZero);
         }
       Serial.println();
+    }else{
+      analogWrite(motorOne, motorZero);
     }
 
     if (Xbox.getButtonClick(UP)){
