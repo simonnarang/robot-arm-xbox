@@ -24,16 +24,15 @@ void setup() {
   pinMode(motorThree, OUTPUT);
   pinMode(motorFour, OUTPUT);
   Serial.begin(115200);
-  while (!Serial); // Wait for serial port to connect - used on Leonardo, Teensy and other boards with built-in USB CDC serial connection
+  while (!Serial);
   if (Usb.Init() == -1) {
     Serial.print(F("\r\nOSC did not start"));
-    while (1); //halt
+    while (1); //hold up
   }
   Serial.print(F("\r\nXBOX USB Library Started"));
 }
 
 void loop() {
-  digitalWrite(53, HIGH);
   Usb.Task();
   if (Xbox.XboxOneConnected) {
     if (Xbox.getAnalogHat(LeftHatX) > 7500 || Xbox.getAnalogHat(LeftHatX) < -7500 || Xbox.getAnalogHat(LeftHatY) > 7500 || Xbox.getAnalogHat(LeftHatY) < -7500 || Xbox.getAnalogHat(RightHatX) > 7500 || Xbox.getAnalogHat(RightHatX) < -7500 || Xbox.getAnalogHat(RightHatY) > 7500 || Xbox.getAnalogHat(RightHatY) < -7500) {
@@ -43,13 +42,20 @@ void loop() {
         Serial.print("\t");
       }
       if (Xbox.getAnalogHat(LeftHatY) > 7500 || Xbox.getAnalogHat(LeftHatY) < -7500) {
-        analogWrite();
+        //analogWrite();
         Serial.print(F("LeftHatY: "));
         Serial.print(Xbox.getAnalogHat(LeftHatY));
         Serial.print("\t");
+        if (Xbox.getAnalogHat(LeftHatY) > 7500){
+
+        }
+        if(Xbox.getAnalogHat(LeftHatY) < 7500){
+        }else{
+        }
+      }else{
       }
       if (Xbox.getAnalogHat(RightHatX) > 7500 || Xbox.getAnalogHat(RightHatX) < -7500) {
-        analogWrite();
+        //analogWrite();
         Serial.print(F("RightHatX: "));
         Serial.print(Xbox.getAnalogHat(RightHatX));
         Serial.print("\t");
@@ -57,20 +63,27 @@ void loop() {
       if (Xbox.getAnalogHat(RightHatY) > 7500 || Xbox.getAnalogHat(RightHatY) < -7500) {
         Serial.print(F("RightHatY: "));
         Serial.print(Xbox.getAnalogHat(RightHatY));
+        Serial.print("\t");
+        if(Xbox.getAnalogHat(RightHatY) > 7500){
+        }
+        if(Xbox.getAnalogHat(RightHatY) < -7500){
+
+        }
+      }else{
       }
-      Serial.println();
+    }else{
     }
 
     if (Xbox.getButtonPress(L2) > 0 || Xbox.getButtonPress(R2) > 0) {
-      if (Xbox.getButtonPress(L2) > 190) {
+      if (Xbox.getButtonPress(L2) > 0) {
         //rotate entire arm to left at speed based on l2 val
-        analogWrite(motorOne, 190 + Xbox.getButtonPress(L2)/17);
+        analogWrite(motorOne, 250 - Xbox.getButtonPress(L2)/100);
         Serial.print(F("L2: "));
         Serial.print(Xbox.getButtonPress(L2));
         Serial.print("\t");
       }else{
           //stop motor going to left rotation cuz l2 isnt down at all
-          analogWrite(motorOne, motorZero);
+          //analogWrite(motorOne, motorZero);
         }
       if (Xbox.getButtonPress(R2) > 0) {
         //rotate entire arm to right at speed based on r2 val
@@ -87,19 +100,30 @@ void loop() {
       analogWrite(motorOne, motorZero);
     }
 
-    if (Xbox.getButtonClick(UP)){
+    if (Xbox.getButtonPress(UP)){
       //test to make sure its all good
       digitalWrite(testLEDOne, HIGH);
       digitalWrite(testLEDTwo, HIGH);
+      analogWrite(motorTwo, 240);
       Serial.println(F("Up"));
     }else{
       digitalWrite(testLEDOne, LOW);
       digitalWrite(testLEDTwo, LOW);
+      if(Xbox.getButtonPress(DOWN)){
+      }else{
+        analogWrite(motorTwo, motorZero);
+        }
       }
-    if (Xbox.getButtonClick(DOWN)){
+    if (Xbox.getButtonPress(DOWN)){
       //test to make sure its all good
       Serial.println(F("Down"));
-    }
+      analogWrite(motorTwo, 99);
+    }else{
+      if(Xbox.getButtonPress(DOWN)){
+        }else{
+          analogWrite(motorTwo, motorZero);
+          }
+      }
     if (Xbox.getButtonClick(LEFT)){
       //test to make sure its all good
       Serial.println(F("Left"));
@@ -125,20 +149,47 @@ void loop() {
       Serial.println(F("L2"));
     if (Xbox.getButtonClick(R2))
       Serial.println(F("R2"));
-    if (Xbox.getButtonClick(L3))
+    if (Xbox.getButtonPress(L3)){
       Serial.println(F("L3"));
-    if (Xbox.getButtonClick(R3))
+      analogWrite(motorFour, 240);
+    }else{
+      if(Xbox.getButtonPress(R3)){
+      }else{
+        analogWrite(motorFour, motorZero);
+      }
+    }
+    if (Xbox.getButtonPress(R3)){
       Serial.println(F("R3"));
+      analogWrite(motorFour, 90);
+    }else{
+      if(Xbox.getButtonPress(L3)){
+      }else{
+        analogWrite(motorFour, motorZero);
+      }
+    }
 
-
-    if (Xbox.getButtonClick(A))
+    if (Xbox.getButtonPress(A)){
       Serial.println(F("A"));
+      analogWrite(motorThree, 240);
+    }else{
+      if (Xbox.getButtonPress(Y)){
+      }else{
+        analogWrite(motorThree, motorZero);
+      }
+    }
     if (Xbox.getButtonClick(B))
       Serial.println(F("B"));
     if (Xbox.getButtonClick(X))
       Serial.println(F("X"));
-    if (Xbox.getButtonClick(Y))
+    if (Xbox.getButtonPress(Y)){
       Serial.println(F("Y"));
+      analogWrite(motorThree, 90);
+    }else{
+      if (Xbox.getButtonPress(A)){
+      }else{
+        analogWrite(motorThree, motorZero);
+      }
+    }
   }
   delay(1);
 }
