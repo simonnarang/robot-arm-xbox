@@ -12,13 +12,8 @@ int statusLED = 52;
 int baseRotateMotor = 3;
 int hipRotateMotor = 5;
 int shoulderRotateMotor = 6;
-int electromagnet1 = 9;
-int electromagnet2 = 11;
+int clawMotor = 9;
 int vex3932MotorZero = 190; //PWM Value at which VEX 2-wire 393 Motors Don't Move
-int hipRotateMotorXYAverageStepOne;
-int hipRotateMotorXYAverageStepTwo;
-int shoulderRotateMotorXYAverageStepOne;
-int shoulderRotateMotorXYAverageStepTwo;
 
 void setup() {
 
@@ -26,8 +21,7 @@ void setup() {
   pinMode(baseRotateMotor, OUTPUT);
   pinMode(hipRotateMotor, OUTPUT);
   pinMode(shoulderRotateMotor, OUTPUT);
-  pinMode(electromagnet1, OUTPUT);
-  pinMode(electromagnet2, OUTPUT);
+  pinMode(clawMotor, OUTPUT);
 
   Serial.begin(115200);
 
@@ -37,11 +31,11 @@ void setup() {
 
     Serial.print(F("\r\n OSC did not start"));
 
-    while (1); //hold up
+    while (1);
 
   }
 
-  Serial.print(F("\r\n XBOX USB Library Started"));
+  Serial.print(F("\r\n Yay! XBOX USB Library Started. Give Yourself a Pat on the Back 👏"));
 
 }
 
@@ -62,14 +56,14 @@ void loop() {
 
       if (Xbox.getAnalogHat(LeftHatX) > 7500 || Xbox.getAnalogHat(LeftHatX) < -7500) {
 
-        Serial.print(F("LeftHatX: "));
+        Serial.print(F("\r\n LeftHatX: "));
         Serial.print(Xbox.getAnalogHat(LeftHatX));
         Serial.print("\t");
 
       }
       if (Xbox.getAnalogHat(LeftHatY) > 7500 || Xbox.getAnalogHat(LeftHatY) < -7500) {
 
-        Serial.print(F("LeftHatY: "));
+        Serial.print(F("\r\n LeftHatY: "));
         Serial.print(Xbox.getAnalogHat(LeftHatY));
         Serial.print("\t");
 
@@ -87,14 +81,14 @@ void loop() {
 
       if (Xbox.getAnalogHat(RightHatX) > 7500 || Xbox.getAnalogHat(RightHatX) < -7500) {
 
-        Serial.print(F("RightHatX: "));
+        Serial.print(F("\r\n RightHatX: "));
         Serial.print(Xbox.getAnalogHat(RightHatX));
         Serial.print("\t");
 
       }
       if (Xbox.getAnalogHat(RightHatY) > 7500 || Xbox.getAnalogHat(RightHatY) < -7500) {
 
-        Serial.print(F("RightHatY: "));
+        Serial.print(F("\r\n RightHatY: "));
         Serial.print(Xbox.getAnalogHat(RightHatY));
         Serial.print("\t");
 
@@ -143,7 +137,7 @@ void loop() {
         //stop motor going to right rotation cuz r2 isnt down at all
         analogWrite(baseRotateMotor, vex3932MotorZero);
 
-        }
+      }
 
       Serial.println();
 
@@ -174,6 +168,7 @@ void loop() {
         }
 
       }
+
     if (Xbox.getButtonPress(DOWN)) {
 
       //test to make sure its all good
@@ -252,7 +247,7 @@ void loop() {
 
     if (Xbox.getButtonPress(L3)) {
 
-      analogWrite(electromagnet1, 240);
+      analogWrite(clawMotor, 240);
       Serial.println(F("L3"));
 
     } else {
@@ -261,14 +256,14 @@ void loop() {
 
       } else {
 
-        analogWrite(electromagnet1, vex3932MotorZero);
+        analogWrite(clawMotor, vex3932MotorZero);
 
       }
     }
 
     if (Xbox.getButtonPress(R3)) {
 
-      analogWrite(electromagnet1, 90);
+      analogWrite(clawMotor, 90);
 
       Serial.println(F("R3"));
 
@@ -278,7 +273,7 @@ void loop() {
 
       } else {
 
-        analogWrite(electromagnet1, vex3932MotorZero);
+        analogWrite(clawMotor, vex3932MotorZero);
 
       }
     }
