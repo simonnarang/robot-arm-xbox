@@ -8,7 +8,6 @@
 USB Usb;
 XBOXONE Xbox(&Usb);
 
-int statusLED = 52;
 int baseRotateMotor = 3;
 int hipRotateMotor = 5;
 int shoulderRotateMotor = 6;
@@ -17,7 +16,6 @@ int vex3932MotorZero = 190; //PWM Value at which VEX 2-wire 393 Motors Don't Mov
 
 void setup() {
 
-  pinMode(statusLED, OUTPUT);
   pinMode(baseRotateMotor, OUTPUT);
   pinMode(hipRotateMotor, OUTPUT);
   pinMode(shoulderRotateMotor, OUTPUT);
@@ -29,7 +27,7 @@ void setup() {
 
   if (Usb.Init() == -1) {
 
-    Serial.print(F("\r\n OSC did not start"));
+    Serial.print(F("\r\n Unable to connect with Xbox controller. Try EEPROM reseting this board and then uploading your code again. Also, make sure the Xbox controller is properly functioning."));
 
     while (1);
 
@@ -149,15 +147,9 @@ void loop() {
 
     if (Xbox.getButtonPress(UP)){
 
-      //test to make sure robot is properly functioning
-
-      digitalWrite(statusLED, HIGH);
-
       Serial.println(F("Up"));
 
     } else {
-
-      digitalWrite(statusLED, LOW);
 
       if (Xbox.getButtonPress(DOWN)) {
 
