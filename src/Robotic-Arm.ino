@@ -8,18 +8,19 @@
 USB Usb;
 XBOXONE Xbox(&Usb);
 
-int baseRotateMotor = 3;
-int hipRotateMotor = 5;
-int shoulderRotateMotor = 6;
-int clawMotor = 9;
-int vex3932MotorZero = 190; //PWM Value at which VEX 2-wire 393 Motors Don't Move
+int baseRotateServo = 3;
+int hipRotateServo = 5;
+int shoulderRotateServo = 6;
+int clawServo = 9;
+int pennyHolderServo = 11;
 
 void setup() {
 
-  pinMode(baseRotateMotor, OUTPUT);
-  pinMode(hipRotateMotor, OUTPUT);
-  pinMode(shoulderRotateMotor, OUTPUT);
-  pinMode(clawMotor, OUTPUT);
+  pinMode(baseRotateServo, OUTPUT);
+  pinMode(hipRotateServo, OUTPUT);
+  pinMode(shoulderRotateServo, OUTPUT);
+  pinMode(clawServo, OUTPUT);
+  pinMode(pennyHolderServo, OUTPUT);
 
   Serial.begin(115200);
 
@@ -59,21 +60,12 @@ void loop() {
         Serial.print("\t");
 
       }
+
       if (Xbox.getAnalogHat(LeftHatY) > 7500 || Xbox.getAnalogHat(LeftHatY) < -7500) {
 
         Serial.print(F("\r\n LeftHatY: "));
         Serial.print(Xbox.getAnalogHat(LeftHatY));
         Serial.print("\t");
-
-        if (Xbox.getAnalogHat(LeftHatY) > 7500){
-
-        } else if (Xbox.getAnalogHat(LeftHatY) < 7500){
-
-        } else {
-
-        }
-
-      } else {
 
       }
 
@@ -84,25 +76,13 @@ void loop() {
         Serial.print("\t");
 
       }
+
       if (Xbox.getAnalogHat(RightHatY) > 7500 || Xbox.getAnalogHat(RightHatY) < -7500) {
 
         Serial.print(F("\r\n RightHatY: "));
         Serial.print(Xbox.getAnalogHat(RightHatY));
         Serial.print("\t");
-
-        if (Xbox.getAnalogHat(RightHatY) > 7500){
-
-        }
-
-        if (Xbox.getAnalogHat(RightHatY) < -7500){
-
-        }
-
-      } else {
-
       }
-
-    } else {
 
     }
 
@@ -110,38 +90,19 @@ void loop() {
 
       if (Xbox.getButtonPress(L2) > 0) {
 
-        //rotate entire arm to left at speed based on l2 value
-        analogWrite(baseRotateMotor, 250 - Xbox.getButtonPress(L2)/100);
-
         Serial.print(F("L2: "));
         Serial.print(Xbox.getButtonPress(L2));
         Serial.print("\t");
-
-      } else {
 
       }
 
       if (Xbox.getButtonPress(R2) > 0) {
 
-        //rotate entire arm to right at speed based on r2 val
-        analogWrite(baseRotateMotor, 190 - Xbox.getButtonPress(R2)/11.5);
-
         Serial.print(F("R2: "));
         Serial.print(Xbox.getButtonPress(R2));
         Serial.print("\t");
 
-      } else {
-
-        //stop motor going to right rotation cuz r2 isnt down at all
-        analogWrite(baseRotateMotor, vex3932MotorZero);
-
       }
-
-      Serial.println();
-
-    } else {
-
-      analogWrite(baseRotateMotor, vex3932MotorZero);
 
     }
 
@@ -149,40 +110,20 @@ void loop() {
 
       Serial.println(F("Up"));
 
-    } else {
-
-      if (Xbox.getButtonPress(DOWN)) {
-
-      } else {
-
-        analogWrite(hipRotateMotor, vex3932MotorZero);
-
-        }
-
-      }
+    }
 
     if (Xbox.getButtonPress(DOWN)) {
 
-      //test to make sure its all good
       Serial.println(F("Down"));
-      analogWrite(hipRotateMotor, 99);
 
-    } else {
+    }
 
-      if (Xbox.getButtonPress(DOWN)){
-
-        } else {
-
-          analogWrite(hipRotateMotor, vex3932MotorZero);
-
-          }
-      }
     if (Xbox.getButtonClick(LEFT)) {
 
-      //test to make sure its all good
       Serial.println(F("Left"));
 
     }
+
     if (Xbox.getButtonClick(RIGHT)) {
 
       Serial.println(F("Right"));
@@ -239,52 +180,20 @@ void loop() {
 
     if (Xbox.getButtonPress(L3)) {
 
-      analogWrite(clawMotor, 240);
       Serial.println(F("L3"));
 
-    } else {
-
-      if (Xbox.getButtonPress(R3)) {
-
-      } else {
-
-        analogWrite(clawMotor, vex3932MotorZero);
-
-      }
     }
 
     if (Xbox.getButtonPress(R3)) {
 
-      analogWrite(clawMotor, 90);
-
       Serial.println(F("R3"));
 
-    } else {
-
-      if(Xbox.getButtonPress(L3)) {
-
-      } else {
-
-        analogWrite(clawMotor, vex3932MotorZero);
-
-      }
     }
 
     if (Xbox.getButtonPress(A)) {
 
       Serial.println(F("A"));
 
-      analogWrite(shoulderRotateMotor, 240);
-
-    } else {
-
-      if (Xbox.getButtonPress(Y)) {
-
-      } else {
-
-        analogWrite(shoulderRotateMotor, vex3932MotorZero);
-
-      }
     }
 
     if (Xbox.getButtonClick(B)) {
@@ -301,19 +210,10 @@ void loop() {
 
     if (Xbox.getButtonPress(Y)) {
 
-      analogWrite(shoulderRotateMotor, 90);
       Serial.println(F("Y"));
 
-    } else {
-
-      if (Xbox.getButtonPress(A)) {
-
-      } else {
-
-        analogWrite(shoulderRotateMotor, vex3932MotorZero);
-
-      }
     }
+
   }
 
   delay(1);
