@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "XBOXONE.h"
+#include "Servo.h"
 #ifdef dobogusinclude
 #include <spi4teensy3.h>
 #include <SPI.h>
@@ -8,19 +9,27 @@
 USB Usb;
 XBOXONE Xbox(&Usb);
 
-int baseRotateServo = 3;
-int hipRotateServo = 5;
-int shoulderRotateServo = 6;
-int clawServo = 9;
-int pennyHolderServo = 11;
+Servo baseRotateServo;
+Servo hipRotateServo;
+Servo shoulderRotateServo;
+Servo clawServo;
+Servo pennyHolderServo;
 
 void setup() {
 
-  pinMode(baseRotateServo, OUTPUT);
-  pinMode(hipRotateServo, OUTPUT);
-  pinMode(shoulderRotateServo, OUTPUT);
-  pinMode(clawServo, OUTPUT);
-  pinMode(pennyHolderServo, OUTPUT);
+  int statusLEDPort = 11;
+
+  baseRotateServo.attach(3);
+  hipRotateServo.attach(5);
+  shoulderRotateServo.attach(6);
+  clawServo.attach(7);
+  pennyHolderServo.attach(9);
+
+  baseRotateServo.write(0);
+  hipRotateServo.write(0);
+  shoulderRotateServo.write(0);
+  clawServo.write(0);
+  pennyHolderServo.write(0);
 
   Serial.begin(115200);
 
