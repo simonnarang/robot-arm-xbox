@@ -1,6 +1,13 @@
+/*  This file is the intellectual property of:
+ *  Simon Narang and William Wang, understood to be "Nawang Labs"
+ *  Under no legal premise is this file to copied without the full enirety of permission granted by Nawang
+ *  Developed under the MIT license
+ */
+
 #include <Arduino.h>
 #include "XBOXONE.h"
 #include "Servo.h"
+#include "vexMotor.h"
 #ifdef dobogusinclude
 #include <spi4teensy3.h>
 #include <SPI.h>
@@ -9,28 +16,22 @@
 USB Usb;
 XBOXONE Xbox(&Usb);
 
-Servo baseRotateServo;
-Servo hipRotateServo;
-Servo shoulderRotateServo;
-Servo clawServo;
-Servo pennyHolderServo;
+int statusLEDPort = 13;
+
+vexMotor base;
+vexMotor hip;
+vexMotor shoulder;
+vexMotor claw;
+vexMotor pennyHolder;
 
 void setup() {
 
-  int statusLEDPort = 11;
-
-  baseRotateServo.attach(3);
-  hipRotateServo.attach(5);
-  shoulderRotateServo.attach(6);
-  clawServo.attach(7);
-  pennyHolderServo.attach(9);
-
-  baseRotateServo.write(0);
-  hipRotateServo.write(0);
-  shoulderRotateServo.write(0);
-  clawServo.write(0);
-  pennyHolderServo.write(0);
-
+  base.attach(3);
+  hip.attach(5);
+  shoulder.attach(6);
+  claw.attach(9);
+  pennyHolder.attach(10);
+  
   Serial.begin(115200);
 
   while (!Serial);
@@ -119,14 +120,24 @@ void loop() {
 
       Serial.println(F("Up"));
 
-    }
-
-    if (Xbox.getButtonPress(DOWN)) {
+      hip.write(-190);
+      
+    } else {
+      
+      if (Xbox.getButtonPress(DOWN)) {
 
       Serial.println(F("Down"));
 
-    }
+      hip.write(100);
+      
+      } else {
 
+      hip.write(0);
+            
+      }
+      
+    }
+    
     if (Xbox.getButtonClick(LEFT)) {
 
       Serial.println(F("Left"));
